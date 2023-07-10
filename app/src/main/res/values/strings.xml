@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Call Log</string>
+
+    <string name="main_fragment_label">Call Log</string>
+    <string name="permissions_fragment_label">Permissions Check</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="fragment_main_call_log_header">Calls logged since app start:</string>
+    <string name="fragment_main_ip_address">Server address: %s</string>
+    <string name="you_must_grant_all_required_permissions_to_proceed_to_app">You must grant all required permissions to proceed to app</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="server_notification_title">Server is running</string>
+    <string name="server_notification_message">Address: %s</string>
+    <string name="server_notification_cancel_button_text">stop</string>
+</resources>
