@@ -5,13 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
 import android.telephony.TelephonyManager.EXTRA_STATE_IDLE
+import dagger.hilt.android.AndroidEntryPoint
 import org.bogucki.calllog.domain.usecases.SetCallStatusUseCase
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import javax.inject.Inject
 
-class CallStateReceiver : BroadcastReceiver(), KoinComponent {
+@AndroidEntryPoint
+class CallStateReceiver : BroadcastReceiver() {
 
-    val setCallStatus: SetCallStatusUseCase by inject()
+    @Inject
+    lateinit var setCallStatus: SetCallStatusUseCase
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val state = intent?.getStringExtra(TelephonyManager.EXTRA_STATE)

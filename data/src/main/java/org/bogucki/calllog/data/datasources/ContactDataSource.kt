@@ -3,8 +3,10 @@ package org.bogucki.calllog.data.datasources
 import android.content.ContentResolver
 import android.net.Uri
 import android.provider.ContactsContract
+import javax.inject.Inject
 
-internal class ContactDataSource(private val resolver: ContentResolver) {
+class ContactDataSource
+    @Inject constructor (private val resolver: ContentResolver) {
 
     fun getContactNameByPhoneNumber(phoneNumber: String): String? {
         val projection = arrayOf(

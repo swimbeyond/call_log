@@ -5,13 +5,10 @@ import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import org.bogucki.calllog.presentation.fragments.main.MainViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import java.time.Instant
 
 private val gson = GsonBuilder().registerTypeAdapter(
@@ -27,12 +24,20 @@ private val gson = GsonBuilder().registerTypeAdapter(
 
     }).create()
 
-val appModule = module {
-    single(named("main")) { CoroutineScope(SupervisorJob() + Dispatchers.Main) }
-    single(named("io")) { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
+@Module
+@InstallIn(SingletonComponent::class)
+class AppModule {
 
-
-    single<Gson> { gson }
-
-    viewModel { MainViewModel(get(), get()) }
+    @Provides
+    fun provideGson() : Gson = gson
 }
+
+//val appModule = module {
+//    single(named("main")) { CoroutineScope(SupervisorJob() + Dispatchers.Main) }
+//    single(named("io")) { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
+//
+//
+//    single<Gson> { gson }
+//
+//    viewModel { MainViewModel(get(), get()) }
+//}

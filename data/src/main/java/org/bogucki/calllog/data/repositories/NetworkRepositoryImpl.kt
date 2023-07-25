@@ -2,10 +2,12 @@ package org.bogucki.calllog.data.repositories
 
 import org.bogucki.calllog.data.datasources.NetworkDataSource
 import org.bogucki.calllog.domain.repositories.NetworkRepository
+import javax.inject.Inject
 
 private const val HTTP_PREFIX = "http://"
 
-internal class NetworkRepositoryImpl(private val dataSource: NetworkDataSource) :
+class NetworkRepositoryImpl
+    @Inject constructor(private val dataSource: NetworkDataSource) :
     NetworkRepository {
 
     override fun getIpAddress(): String {

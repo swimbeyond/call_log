@@ -3,8 +3,10 @@ package org.bogucki.calllog.presentation.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.WorkManager
+import dagger.hilt.android.AndroidEntryPoint
 import org.bogucki.calllog.databinding.ActivityMainBinding
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 

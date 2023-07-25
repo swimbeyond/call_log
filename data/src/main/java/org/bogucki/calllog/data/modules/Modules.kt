@@ -3,35 +3,51 @@ package org.bogucki.calllog.data.modules
 import android.content.ContentResolver
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.wifi.WifiManager
 import android.telephony.TelephonyManager
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.bogucki.calllog.data.datasources.CallLogDataSource
-import org.bogucki.calllog.data.datasources.ContactDataSource
-import org.bogucki.calllog.data.datasources.NetworkDataSource
 import org.bogucki.calllog.data.repositories.CallRepositoryImpl
 import org.bogucki.calllog.data.repositories.NetworkRepositoryImpl
 import org.bogucki.calllog.domain.repositories.CallRepository
 import org.bogucki.calllog.domain.repositories.NetworkRepository
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
 
-val dataModule = module {
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class DataBindings {
 
-    single(named("io")) { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
+    @Binds
+    abstract fun bindCallRepository(callRepositoryImpl: CallRepositoryImpl): CallRepository
 
-    single<ContentResolver> { androidContext().contentResolver }
+    @Binds
+    abstract fun networkRepository(networkRepositoryImpl: NetworkRepositoryImpl): NetworkRepository
+}
 
-    single { androidContext().applicationContext.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager }
-    single { androidContext().applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
+@Module
+@InstallIn(SingletonComponent::class)
+class DataModule {
 
-    single { ContactDataSource(get()) }
-    single { CallLogDataSource(get(), get(named("io"))) }
-    single { NetworkDataSource(get()) }
+    @Provides
+    fun provideContentResolver(@ApplicationContext context: Context) : ContentResolver {
+        return context.contentResolver
+    }
 
-    single<CallRepository> { CallRepositoryImpl(get(), get()) }
-    single<NetworkRepository> { NetworkRepositoryImpl(get()) }
+    @Provides
+    fun provideTelephonyManager(@ApplicationContext context: Context): TelephonyManager {
+        return context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    }
+
+    @Provides
+    fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager {
+        return context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
+    @Provides
+    fun provideCoroutineScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 }

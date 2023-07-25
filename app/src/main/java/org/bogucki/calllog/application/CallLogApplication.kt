@@ -1,25 +1,20 @@
 package org.bogucki.calllog.application
 
 import android.app.Application
-import org.bogucki.calllog.BuildConfig
-import org.bogucki.calllog.data.modules.dataModule
-import org.bogucki.calllog.domain.modules.domainModule
-import org.bogucki.calllog.modules.appModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.component.KoinComponent
-import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
-class CallLogApplication : Application(), KoinComponent {
+@HiltAndroidApp
+class CallLogApplication : Application(), Configuration.Provider {
 
-    override fun onCreate() {
-        super.onCreate()
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
 
-        startKoin {
-            androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
-            androidContext(this@CallLogApplication)
-            modules(appModule, domainModule, dataModule)
-        }
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
     }
 }

@@ -7,11 +7,14 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.google.gson.Gson
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import io.ktor.gson.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -24,22 +27,23 @@ import org.bogucki.calllog.domain.usecases.GetCallLogUseCase
 import org.bogucki.calllog.domain.usecases.GetCallStatusWithCounterIncrementUseCase
 import org.bogucki.calllog.domain.usecases.GetPortNumberUseCase
 import org.bogucki.calllog.domain.usecases.GetServerAddressUseCase
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
-class ServerWorker(private val context: Context, workerParams: WorkerParameters) :
-    CoroutineWorker(context, workerParams), KoinComponent {
+@HiltWorker
+class ServerWorker @AssistedInject constructor(
+    @Assisted private val context: Context, @Assisted workerParams: WorkerParameters,
+    private val gson: Gson,
+    private val getCallStatus: GetCallStatusWithCounterIncrementUseCase,
+    private val getCallLog: GetCallLogUseCase,
+    private val getServerAddress: GetServerAddressUseCase,
+    private val getPortNumber: GetPortNumberUseCase
+) :
+    CoroutineWorker(context, workerParams) {
 
     private val channelId = "CALL_LOG_SERVER_CHANNEL"
 
-    private val gson: Gson by inject()
-    private val getCallStatus: GetCallStatusWithCounterIncrementUseCase by inject()
-    private val getCallLog: GetCallLogUseCase by inject()
-    private val getServerAddress: GetServerAddressUseCase by inject()
-    private val getPortNumber: GetPortNumberUseCase by inject()
 
     private var startTime = Instant.now()
 

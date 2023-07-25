@@ -15,8 +15,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.bogucki.calllog.domain.models.CallLogEntry
 import java.time.Instant
+import javax.inject.Inject
 
-internal class CallLogDataSource(
+class CallLogDataSource
+    @Inject constructor(
     private val resolver: ContentResolver,
     private val scope: CoroutineScope
 ) {

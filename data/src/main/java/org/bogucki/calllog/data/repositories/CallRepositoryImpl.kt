@@ -7,8 +7,10 @@ import org.bogucki.calllog.data.datasources.ContactDataSource
 import org.bogucki.calllog.domain.models.CallLogEntry
 import org.bogucki.calllog.domain.models.CallStatus
 import org.bogucki.calllog.domain.repositories.CallRepository
+import javax.inject.Inject
 
-internal class CallRepositoryImpl(
+class CallRepositoryImpl
+    @Inject constructor(
     private val contactDataSource: ContactDataSource,
     private val callLogDataSource: CallLogDataSource,): CallRepository {
 

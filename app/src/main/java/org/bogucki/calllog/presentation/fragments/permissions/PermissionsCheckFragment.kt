@@ -9,16 +9,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.navigation.fragment.findNavController
+import androidx.work.Configuration
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import dagger.hilt.android.AndroidEntryPoint
 import org.bogucki.calllog.R
 import org.bogucki.calllog.databinding.FragmentPermissionsCheckBinding
 import org.bogucki.calllog.server.ServerWorker
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
+import javax.inject.Inject
 
 @RuntimePermissions
+@AndroidEntryPoint
 class PermissionsCheckFragment : Fragment() {
 
     private lateinit var binding: FragmentPermissionsCheckBinding
